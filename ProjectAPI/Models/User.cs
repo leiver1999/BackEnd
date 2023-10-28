@@ -13,7 +13,8 @@ namespace ProjectAPI.Models
         public string Token { get; set; }
         public string Role { get; set; }
         public string Email { get; set; }
-
+        public int Telefono { get; set; }
+        public int Cedula { get; set; }
 
     }
 }
