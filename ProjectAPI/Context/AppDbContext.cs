@@ -11,7 +11,8 @@ namespace ProjectAPI.Context
         }
 
         public DbSet<User> Users { get; set; }
-
+        public DbSet<Factura> Facturas { get; set; }
+        public DbSet<Vehiculo> Vehiculos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");

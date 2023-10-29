@@ -84,7 +84,7 @@ namespace ProjectAPI.Controllers
 
 
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
-            userObj.Role = "Admin";
+            userObj.Role = "Administrador";
             userObj.Token = "";
 
             await _authContext.Users.AddAsync(userObj);
@@ -152,20 +152,6 @@ namespace ProjectAPI.Controllers
         {
             return Ok(await _authContext.Users.ToListAsync());
         }
-
-        /*[Authorize]
-        [HttpGet("distributor/{cedula}")]
-        public async Task<IActionResult> GetDistributorByCedula(int cedula)
-        {
-            var distributor = await _authContext.Users.FirstOrDefaultAsync(x => x.Cedula == cedula);
-
-            if (distributor == null)
-            {
-                return NotFound(new { Message = "Distribuidor no encontrado" });
-            }
-
-            return Ok(distributor);
-        }*/
 
         //retorna la informacion de un distribuidor basado en su id
         [Authorize]
