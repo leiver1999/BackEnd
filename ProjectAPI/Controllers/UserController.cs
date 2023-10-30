@@ -84,7 +84,7 @@ namespace ProjectAPI.Controllers
 
 
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
-            userObj.Role = "Administrador";
+            //userObj.Role = "Administrador";
             userObj.Token = "";
 
             await _authContext.Users.AddAsync(userObj);
