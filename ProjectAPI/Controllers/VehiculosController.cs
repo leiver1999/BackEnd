@@ -14,10 +14,11 @@ namespace ProjectAPI.Controllers
         {
             _backendDbContext = backendDbContext;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllVehiculos()
         {
-            var vehiculos = await _backendDbContext.Vehiculos.ToListAsync();
+            var vehiculos = await _backendDbContext.Vehiculos.Where(v => v.IsActive == true).ToListAsync();
 
             return Ok(vehiculos);
         }
@@ -25,8 +26,10 @@ namespace ProjectAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddVehiculo([FromBody] Vehiculo vehiculoRequest)
         {
-            vehiculoRequest.IdVehiculo = Guid.NewGuid();
+            if (vehiculoRequest == null)
+                return BadRequest();
 
+            vehiculoRequest.IsActive = true;
             await _backendDbContext.Vehiculos.AddAsync(vehiculoRequest);
             await _backendDbContext.SaveChangesAsync();
 
@@ -34,12 +37,10 @@ namespace ProjectAPI.Controllers
         }
 
         [HttpGet]
-
-        [Route("{idVehiculo:Guid}")]
-
-        public async Task<IActionResult> GetVehiculo([FromRoute] Guid idVehiculo)
+        [Route("{id}")]
+        public async Task<IActionResult> GetVehiculo([FromRoute] int id)
         {
-            var vehiculo = await _backendDbContext.Vehiculos.FirstOrDefaultAsync(x => x.IdVehiculo == idVehiculo);
+            var vehiculo = await _backendDbContext.Vehiculos.FirstOrDefaultAsync(x => x.Id == id);
             if (vehiculo == null)
             {
                 return NotFound();
@@ -48,11 +49,11 @@ namespace ProjectAPI.Controllers
         }
 
         [HttpPut]
-        [Route("{idVehiculo:Guid}")]
+        [Route("{id}")]
 
-        public async Task<IActionResult> UpdateVehiculo([FromRoute] Guid idVehiculo, Vehiculo updateVehiculoRequest)
+        public async Task<IActionResult> UpdateVehiculo([FromRoute] int id, Vehiculo updateVehiculoRequest)
         {
-            var vehiculo = await _backendDbContext.Vehiculos.FindAsync(idVehiculo);
+            var vehiculo = await _backendDbContext.Vehiculos.FindAsync(id);
             if (vehiculo == null)
             {
                 return NotFound();
@@ -69,11 +70,11 @@ namespace ProjectAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("{idVehiculo:Guid}")]
+        [Route("{id}")]
 
-        public async Task<IActionResult> DeleteVehiculo([FromRoute] Guid idVehiculo)
+        public async Task<IActionResult> DeleteVehiculo([FromRoute] int id)
         {
-            var vehiculo = await _backendDbContext.Vehiculos.FindAsync(idVehiculo);
+            var vehiculo = await _backendDbContext.Vehiculos.FindAsync(id);
             if (vehiculo == null)
             {
                 return NotFound();
@@ -84,5 +85,24 @@ namespace ProjectAPI.Controllers
 
             return Ok(vehiculo);
         }
+
+        [HttpPut]
+        [Route("deactivate/{id}")]
+
+        public async Task<IActionResult> DeactivateVehiculo([FromRoute] int id)
+        {
+            var vehiculo = await _backendDbContext.Vehiculos.FindAsync(id);
+            if (vehiculo == null)
+            {
+                return NotFound();
+            }
+
+            vehiculo.IsActive = false; // Desactiva el vehículo
+
+            await _backendDbContext.SaveChangesAsync();
+
+            return Ok(vehiculo);
+        }
+
     }
 }

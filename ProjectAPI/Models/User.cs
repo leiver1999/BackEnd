@@ -15,6 +15,8 @@ namespace ProjectAPI.Models
         public string Email { get; set; }
         public int Telefono { get; set; }
         public int Cedula { get; set; }
+        public bool IsActive { get; set; }
+
 
     }
 }

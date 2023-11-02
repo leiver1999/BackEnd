@@ -86,6 +86,7 @@ namespace ProjectAPI.Controllers
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
             //userObj.Role = "Administrador";
             userObj.Token = "";
+            userObj.IsActive = true;
 
             await _authContext.Users.AddAsync(userObj);
             await _authContext.SaveChangesAsync();
@@ -148,17 +149,19 @@ namespace ProjectAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<User>>GetAllUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllActiveUsers()
         {
-            return Ok(await _authContext.Users.ToListAsync());
+            var activeUsers = await _authContext.Users.Where(user => user.IsActive).ToListAsync();
+            return Ok(activeUsers);
         }
+
 
         //retorna la informacion de un distribuidor basado en su id
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(int id)
+        public async Task<ActionResult<User>> GetActiveUserById(int id)
         {
-            var user = await _authContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user = await _authContext.Users.FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
 
             if (user == null)
             {
@@ -207,11 +210,34 @@ namespace ProjectAPI.Controllers
             user.Telefono = updatedUser.Telefono;
             user.Cedula = updatedUser.Cedula;
 
+
             // Guarda los cambios en la base de datos
             await _authContext.SaveChangesAsync();
 
             return Ok(new { Message = "Datos de usuario actualizados exitosamente" });
         }
 
+        // Desactiva un usuario por su ID
+        [Authorize]
+        [HttpPut("deactivate/{id}")]
+        public async Task<IActionResult> DeactivateUser(int id)
+        {
+            var user = await _authContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (user == null)
+            {
+                return NotFound(new { Message = "Usuario no encontrado" });
+            }
+
+            // Desactiva el usuario
+            user.IsActive = false;
+
+            // Guarda los cambios en la base de datos
+            await _authContext.SaveChangesAsync();
+
+            return Ok(new { Message = "Usuario desactivado exitosamente" });
+        }
+
     }
+
 }

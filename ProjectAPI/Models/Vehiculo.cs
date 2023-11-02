@@ -6,9 +6,7 @@ namespace ProjectAPI.Models
     public class Vehiculo
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid IdVehiculo { get; set; }
-
+        public int Id {  get; set; }
         public string NumeroPlaca { get; set; }
 
         public long Kilometraje { get; set; }
@@ -16,5 +14,7 @@ namespace ProjectAPI.Models
         public string TipoVehiculo { get; set; }
 
         public string EstadoVehiculo { get; set; }
+        public bool IsActive { get; set; }
+
     }
 }
