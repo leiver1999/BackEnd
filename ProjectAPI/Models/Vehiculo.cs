@@ -16,5 +16,6 @@ namespace ProjectAPI.Models
         public string EstadoVehiculo { get; set; }
         public bool IsActive { get; set; }
 
+
     }
 }

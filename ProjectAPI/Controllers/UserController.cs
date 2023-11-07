@@ -37,13 +37,14 @@ namespace ProjectAPI.Controllers
             if (user == null)
                 return NotFound(new { Message = "¡Usuario no encontrado!" });
 
+            if (user.IsActive == false)
+                return NotFound(new { Message = "¡Usuario no encontrado!" });
             if (!PasswordHasher.VerifyPassword(userObj.Password, user.Password))
             {
                 return BadRequest(new { Message = "La contraseña es incorrecta" });
             }
 
             user.Token = CreateJwt(user);
-
 
             return Ok(new
             {
@@ -59,29 +60,28 @@ namespace ProjectAPI.Controllers
             if (userObj == null)
                 return BadRequest();
 
-            //verificar usuario
-            if(await CheckUserNameExist(userObj.Username))
-            {
-                return BadRequest(new { Message = "¡El nombre de usuario ya existe!" });
-            }
-
-            if (!IsValidEmail(userObj.Email))
-            {
-                return BadRequest(new { Message = "El formato del correo electrónico no es válido." });
-            }
-
-            //verificar email
             if (await CheckEmailExist(userObj.Email))
             {
                 return BadRequest(new { Message = "¡El correo ya existe!" });
             }
-
+            if (await CheckCedulaExist(userObj.Cedula))
+            {
+                return BadRequest(new { Message = "¡La cédula ya existe!" });
+            }
+            if (await CheckTelefonoExist(userObj.Telefono))
+            {
+                return BadRequest(new { Message = "¡El teléfono  ya existe!" });
+            }
+            if (await CheckUserNameExist(userObj.Username))
+            {
+                return BadRequest(new { Message = "¡El nombre de usuario ya existe!" });
+            }
 
             //comprobar la seguridad de la contraseña 
-            var pass = CheckPasswordStrength(userObj.Password);
+            /*var pass = CheckPasswordStrength(userObj.Password);
             if (!string.IsNullOrEmpty(pass))
                 return BadRequest(new { Message = pass.ToString() });
-
+            */
 
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
             //userObj.Role = "Administrador";
@@ -98,25 +98,20 @@ namespace ProjectAPI.Controllers
 
         private Task<bool> CheckUserNameExist(string username)
             => _authContext.Users.AnyAsync(x => x.Username == username);
-
-
-        private bool IsValidEmail(string email)
-        {
-            // Utiliza una expresión regular para validar el formato del correo electrónico.
-            // Puedes ajustar la expresión regular según tus requisitos específicos.
-            string emailPattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$";
-            return Regex.IsMatch(email, emailPattern);
-        }
         private Task<bool> CheckEmailExist(string email)
             => _authContext.Users.AnyAsync(x => x.Email == email);
 
+        private Task<bool> CheckCedulaExist(string cedula)
+            => _authContext.Users.AnyAsync(x => x.Cedula == cedula);
 
+        private Task<bool> CheckTelefonoExist(int telefono)
+            => _authContext.Users.AnyAsync(x => x.Telefono == telefono);
 
-        private string CheckPasswordStrength(string password)
+        /* private string CheckPasswordStrength(string password)
         {
             StringBuilder sb = new StringBuilder();
             if (password.Length < 8)
-                sb.Append("La longitud mínima de la contraseña debe ser 8" + Environment.NewLine);
+                sb.Append("La longitud mínima de la contraseña debe ser 10" + Environment.NewLine);
             if (!(Regex.IsMatch(password, "[a-z]") && Regex.IsMatch(password, "[A-Z]")
                 && Regex.IsMatch(password, "[0-9]")))
                 sb.Append("La contraseña debe ser alfanumérica" + Environment.NewLine);
@@ -124,7 +119,7 @@ namespace ProjectAPI.Controllers
                 sb.Append("La contraseña debe contener un carácter especial." + Environment.NewLine);
             return sb.ToString();
         }
-
+        */
         private string CreateJwt(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -222,6 +217,7 @@ namespace ProjectAPI.Controllers
         [HttpPut("deactivate/{id}")]
         public async Task<IActionResult> DeactivateUser(int id)
         {
+
             var user = await _authContext.Users.FirstOrDefaultAsync(x => x.Id == id);
 
             if (user == null)
