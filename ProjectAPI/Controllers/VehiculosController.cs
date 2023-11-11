@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectAPI.Context;
 using ProjectAPI.Models;
@@ -103,6 +104,29 @@ namespace ProjectAPI.Controllers
 
             return Ok(vehiculo);
         }
+
+        // Agrega este método al controlador VehiculosController
+        [Authorize]
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Vehiculo>>> SearchVehiculos([FromQuery] string numeroPlaca)
+        {
+            if (string.IsNullOrWhiteSpace(numeroPlaca))
+            {
+                return BadRequest(new { Message = "El número de placa no puede estar vacío" });
+            }
+
+            var vehiculos = await _backendDbContext.Vehiculos
+                .Where(v => v.IsActive && v.NumeroPlaca.Contains(numeroPlaca))
+                .ToListAsync();
+
+            if (vehiculos.Count == 0)
+            {
+                return NotFound(new { Message = "No se encontraron vehículos con el número de placa proporcionado" });
+            }
+
+            return Ok(vehiculos);
+        }
+
 
     }
 }

@@ -77,14 +77,7 @@ namespace ProjectAPI.Controllers
                 return BadRequest(new { Message = "¡El nombre de usuario ya existe!" });
             }
 
-            //comprobar la seguridad de la contraseña 
-            /*var pass = CheckPasswordStrength(userObj.Password);
-            if (!string.IsNullOrEmpty(pass))
-                return BadRequest(new { Message = pass.ToString() });
-            */
-
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
-            //userObj.Role = "Administrador";
             userObj.Token = "";
             userObj.IsActive = true;
 
@@ -107,19 +100,6 @@ namespace ProjectAPI.Controllers
         private Task<bool> CheckTelefonoExist(int telefono)
             => _authContext.Users.AnyAsync(x => x.Telefono == telefono);
 
-        /* private string CheckPasswordStrength(string password)
-        {
-            StringBuilder sb = new StringBuilder();
-            if (password.Length < 8)
-                sb.Append("La longitud mínima de la contraseña debe ser 10" + Environment.NewLine);
-            if (!(Regex.IsMatch(password, "[a-z]") && Regex.IsMatch(password, "[A-Z]")
-                && Regex.IsMatch(password, "[0-9]")))
-                sb.Append("La contraseña debe ser alfanumérica" + Environment.NewLine);
-            if (!Regex.IsMatch(password, "[<,>,@,!,#,$,%,^,&,*,(,),_,+,\\[,\\],{,},?,:,;,|,',\\,.,/,~,`,-,=]"))
-                sb.Append("La contraseña debe contener un carácter especial." + Environment.NewLine);
-            return sb.ToString();
-        }
-        */
         private string CreateJwt(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -232,6 +212,35 @@ namespace ProjectAPI.Controllers
             await _authContext.SaveChangesAsync();
 
             return Ok(new { Message = "Usuario desactivado exitosamente" });
+        }
+
+        // Agrega este método al controlador UserController
+        [Authorize]
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<User>>> SearchUsers([FromQuery] string searchTerm)
+        {
+            // Verifica si el término de búsqueda no está vacío
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest(new { Message = "El término de búsqueda no puede estar vacío" });
+            }
+
+            // Realiza la búsqueda en la base de datos
+            var matchingUsers = await _authContext.Users
+                .Where(user =>
+                    user.IsActive &&
+                    (user.FirstName.Contains(searchTerm) ||
+                     user.LastName.Contains(searchTerm) ||
+                     user.Cedula.Contains(searchTerm) ||
+                     user.Username.Contains(searchTerm)))
+                .ToListAsync();
+
+            if (matchingUsers.Count == 0)
+            {
+                return NotFound(new { Message = "No se encontraron usuarios que coincidan con el término de búsqueda" });
+            }
+
+            return Ok(matchingUsers);
         }
 
     }
