@@ -16,7 +16,6 @@ namespace ProjectAPI.Models
         public int Telefono { get; set; }
         public string Cedula { get; set; }
         public bool IsActive { get; set; }
-
-
+        public Vehiculo Vehiculo { get; set; }
     }
 }

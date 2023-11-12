@@ -243,6 +243,26 @@ namespace ProjectAPI.Controllers
             return Ok(matchingUsers);
         }
 
+        //[Authorize]
+        [HttpPost("add-vehicle/{userId}")]
+        public async Task<IActionResult> AddVehicleToUser(int userId, [FromBody] Vehiculo vehiculoRequest)
+        {
+            var user = await _authContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return NotFound(new { Message = "Usuario no encontrado" });
+            }
+
+            vehiculoRequest.IsActive = true;
+            user.Vehiculo = vehiculoRequest;
+
+            await _authContext.SaveChangesAsync();
+
+            return Ok(new { Message = "Vehículo agregado al usuario exitosamente" });
+        }
+
+
     }
 
 }

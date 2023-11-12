@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProjectAPI.Models
 {
@@ -15,7 +14,6 @@ namespace ProjectAPI.Models
 
         public string EstadoVehiculo { get; set; }
         public bool IsActive { get; set; }
-
 
     }
 }
