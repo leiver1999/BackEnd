@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectAPI.Context;
 using ProjectAPI.Helper;
 using ProjectAPI.Models;
 using System.Text;
-using System.Text.RegularExpressions;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
-using System.Diagnostics;
+using System.Security.Cryptography;
+using ProjectAPI.Models.Dto;
 
 namespace ProjectAPI.Controllers
 {
@@ -20,9 +18,14 @@ namespace ProjectAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _authContext;
-        public UserController(AppDbContext appDbContext) {
+        private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
+        public UserController(AppDbContext appDbContext, IConfiguration configuration, IEmailService emailService)
+        {
 
             _authContext = appDbContext;
+            _configuration = configuration;
+            _emailService = emailService;
         }
 
         //sirve para autenticar usuarios por su nombre de usuario y contraseña
@@ -214,7 +217,6 @@ namespace ProjectAPI.Controllers
             return Ok(new { Message = "Usuario desactivado exitosamente" });
         }
 
-        // Agrega este método al controlador UserController
         [Authorize]
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<User>>> SearchUsers([FromQuery] string searchTerm)
@@ -243,6 +245,68 @@ namespace ProjectAPI.Controllers
             return Ok(matchingUsers);
         }
 
+        [HttpPost("send-reset-email/{email}")]
+        public async Task<IActionResult> SendEmail(string email)
+        {
+            var user = await _authContext.Users.FirstOrDefaultAsync(a=>a.Email == email);
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "El email no existe en la base de datos"
+                });
+            }
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var emailToken = Convert.ToBase64String(tokenBytes);
+            user.ResetPasswordToken = emailToken;
+            user.ResetPasswordExpiry = DateTime.Now.AddMinutes(15);
+            string from = _configuration["EmailSettings:EmailUsername"];
+            var emailModel = new EmailDto(email, "Resetear Contraseña", RecoverPassEmailBody.EmailStringBody(email, emailToken));
+            _emailService.SendEmail(emailModel);
+            _authContext.Entry(user).State = EntityState.Modified;
+            await _authContext.SaveChangesAsync();
+            return Ok(new
+            {
+                StatusCode = 200,
+                Message = "Se envió el correo"
+            });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            var newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
+            var user = await _authContext.Users.AsNoTracking().FirstOrDefaultAsync(a => a.Email == resetPasswordDto.Email);
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "El usuario no existe en la base de datos"
+                });
+            }
+            var tokenCode = user.ResetPasswordToken;
+            DateTime emailTokenExpiry = user.ResetPasswordExpiry;
+            if(tokenCode != resetPasswordDto.EmailToken  || emailTokenExpiry < DateTime.Now)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = 400,
+                    Message = "El link para cambiar contraseña es invalido"
+                });
+            }
+            user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+            _authContext.Entry(user).State |= EntityState.Modified;
+            await _authContext.SaveChangesAsync();
+            return Ok(new
+            {
+                StatusCode = 200,
+                Message = "Se cambio la contraseña de manera correcta."
+            });
+
+        }
+
         //[Authorize]
         [HttpPost("add-vehicle/{userId}")]
         public async Task<IActionResult> AddVehicleToUser(int userId, [FromBody] Vehiculo vehiculoRequest)
@@ -261,8 +325,5 @@ namespace ProjectAPI.Controllers
 
             return Ok(new { Message = "Vehículo agregado al usuario exitosamente" });
         }
-
-
     }
-
 }
