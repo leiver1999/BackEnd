@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Desktop\\Authentication\\ProjectAPI\\ProjectAPI\\ProjectAPI.csproj": {}
+    "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Desktop\\Authentication\\ProjectAPI\\ProjectAPI\\ProjectAPI.csproj": {
+    "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Authentication\\ProjectAPI\\ProjectAPI\\ProjectAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
         "projectName": "ProjectAPI",
-        "projectPath": "C:\\Users\\Usuario\\Desktop\\Authentication\\ProjectAPI\\ProjectAPI\\ProjectAPI.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Desktop\\Authentication\\ProjectAPI\\ProjectAPI\\obj\\",
+        "projectPath": "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+        "packagesPath": "C:\\Users\\Jeff\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Jeff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +40,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.9, )"
@@ -82,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
