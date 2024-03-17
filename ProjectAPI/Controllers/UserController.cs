@@ -118,6 +118,9 @@ namespace ProjectAPI.Controllers
             user.Token = "";
             user.IsActive = true;
 
+            await _authContext.Users.AddAsync(user);
+            await _authContext.SaveChangesAsync();
+
             // Asignar vehículo al usuario si se proporcionó un VehicleId
             if (user.VehiculoId != null)
             {
