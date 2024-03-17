@@ -53,11 +53,11 @@ namespace ProjectAPI.Controllers
             {
                 Token = user.Token,
                 Message = "Acceso exitoso"
-            }) ;
+            });
         }
 
         //sirve para guardar nuevos usuarios
-        [HttpPost("register")]
+        /*[HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] User userObj)
         {
             if (userObj == null)
@@ -90,10 +90,55 @@ namespace ProjectAPI.Controllers
             {
                 Message = "Usuario registrado"
             });
+        }*/
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] User user)
+        {
+            if (user == null)
+                return BadRequest();
+
+            if (await CheckEmailExist(user.Email))
+            {
+                return BadRequest(new { Message = "¡El correo ya existe!" });
+            }
+            if (await CheckCedulaExist(user.Cedula))
+            {
+                return BadRequest(new { Message = "¡La cédula ya existe!" });
+            }
+            if (await CheckTelefonoExist(user.Telefono))
+            {
+                return BadRequest(new { Message = "¡El teléfono ya existe!" });
+            }
+            if (await CheckUserNameExist(user.Username))
+            {
+                return BadRequest(new { Message = "¡El nombre de usuario ya existe!" });
+            }
+
+            user.Password = PasswordHasher.HashPassword(user.Password);
+            user.Token = "";
+            user.IsActive = true;
+
+            // Asignar vehículo al usuario si se proporcionó un VehicleId
+            if (user.VehiculoId != null)
+            {
+                var vehicleId = (int)user.VehiculoId;
+
+                var result = await AddVehicleToUser(user.Id, vehicleId);
+                if (result is StatusCodeResult)
+                {
+                    return result; // Devolver el resultado de AddVehicleToUser si hubo un error
+                }
+            }
+
+            return Ok(new
+            {
+                Message = "Usuario Registrado"
+            });
         }
 
+
         private Task<bool> CheckUserNameExist(string username)
-            => _authContext.Users.AnyAsync(x => x.Username == username);
+        => _authContext.Users.AnyAsync(x => x.Username == username);
         private Task<bool> CheckEmailExist(string email)
             => _authContext.Users.AnyAsync(x => x.Email == email);
 
@@ -188,12 +233,24 @@ namespace ProjectAPI.Controllers
             user.Telefono = updatedUser.Telefono;
             user.Cedula = updatedUser.Cedula;
 
+            // Verifica si se proporcionó un vehículoId para actualizar el vehículo asignado al usuario
+            if (updatedUser.VehiculoId != null)
+            {
+                var vehicleId = (int)updatedUser.VehiculoId;
+                // Actualiza el vehículo asignado al usuario
+                var result = await AddVehicleToUser(user.Id, vehicleId);
+                if (result is StatusCodeResult)
+                {
+                    return result; // Devuelve el resultado de AssignVehicleToUser si hubo un error
+                }
+            }
 
             // Guarda los cambios en la base de datos
             await _authContext.SaveChangesAsync();
 
             return Ok(new { Message = "Datos de usuario actualizados exitosamente" });
         }
+
 
         // Desactiva un usuario por su ID
         [Authorize]
@@ -248,7 +305,7 @@ namespace ProjectAPI.Controllers
         [HttpPost("send-reset-email/{email}")]
         public async Task<IActionResult> SendEmail(string email)
         {
-            var user = await _authContext.Users.FirstOrDefaultAsync(a=>a.Email == email);
+            var user = await _authContext.Users.FirstOrDefaultAsync(a => a.Email == email);
             if (user == null)
             {
                 return NotFound(new
@@ -288,7 +345,7 @@ namespace ProjectAPI.Controllers
             }
             var tokenCode = user.ResetPasswordToken;
             DateTime emailTokenExpiry = user.ResetPasswordExpiry;
-            if(tokenCode != resetPasswordDto.EmailToken  || emailTokenExpiry < DateTime.Now)
+            if (tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now)
             {
                 return BadRequest(new
                 {
@@ -308,22 +365,48 @@ namespace ProjectAPI.Controllers
         }
 
         //[Authorize]
-        [HttpPost("add-vehicle/{userId}")]
-        public async Task<IActionResult> AddVehicleToUser(int userId, [FromBody] Vehiculo vehiculoRequest)
+        [HttpPost("signar-vehiculo/{userId}")]
+        public async Task<IActionResult> AddVehicleToUser(int userId, [FromBody] int vehiculoId)
         {
             var user = await _authContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound($"Usuario con ID {userId} no encontrado.");
+            }
+
+            var vehiculo = await _authContext.Vehiculos.FirstOrDefaultAsync(v => v.Id == vehiculoId);
+            if (vehiculo == null)
+            {
+                return NotFound($"Vehículo con ID {userId} no encontrado.");
+            }
+
+            user.Vehiculo = vehiculo;
+
+            try
+            {
+                await _authContext.SaveChangesAsync();
+                return Ok($"Vehículo con ID {vehiculoId} agregado al usuario {userId} satisfactoriamente.");
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, $"Error al agregar vehículo al usuario: {ex.Message}");
+            }
+        }
+
+        [HttpGet("ver-vehiculo-asignado/{userId}")]
+        public async Task<IActionResult> GetVehicleByUserId(int userId)
+        {
+            var user = await _authContext.Users.Include(u => u.Vehiculo).FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
-                return NotFound(new { Message = "Usuario no encontrado" });
+                return NotFound($"Usuario con ID {userId} no encontrado.");
             }
-
-            vehiculoRequest.IsActive = true;
-            user.Vehiculo = vehiculoRequest;
-
-            await _authContext.SaveChangesAsync();
-
-            return Ok(new { Message = "Vehículo agregado al usuario exitosamente" });
+            if (user.Vehiculo == null)
+            {
+                return NotFound($"Usuario con ID {userId} no tiene ningún vehiculo asignado.");
+            }
+            return Ok(user.Vehiculo);
         }
     }
 }

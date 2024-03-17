@@ -3,11 +3,11 @@ using ProjectAPI.Models;
 
 namespace ProjectAPI.Context
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) :base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<User> Users { get; set; }
@@ -15,10 +15,13 @@ namespace ProjectAPI.Context
         public DbSet<Vehiculo> Vehiculos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasOne(u => u.Vehiculo).WithOne().HasForeignKey<User>(u => u.VehiculoId).IsRequired(false);
+
             modelBuilder.Entity<User>().ToTable("users");
+            base.OnModelCreating(modelBuilder);
         }
 
-        
-        
+
+
     }
 }
