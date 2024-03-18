@@ -27,7 +27,7 @@ namespace ProjectAPI.Controllers
             return Ok(requisicion);
         }
 
-        [HttpGet("{requisicionId}/facturas")]
+        [HttpGet("facturas/{requisicionId}")]
         public IActionResult ObtenerFacturasDeRequisicion(int requisicionId)
         {
             var requisicion = _context.Requisiciones.Find(requisicionId);
@@ -41,6 +41,20 @@ namespace ProjectAPI.Controllers
             var facturas = _context.Facturas.Where(f => f.RequisicionId == requisicionId).ToList();
 
             return Ok(facturas);
+        }
+
+        [HttpGet]
+        public IActionResult ObtenerRequisiciones()
+        {
+            var requisiciones = _context.Requisiciones.ToList();
+
+            // Iterar sobre cada requisición y establecer la lista de facturas como nula
+            foreach (var requisicion in requisiciones)
+            {
+                requisicion.Facturas = null;
+            }
+
+            return Ok(requisiciones);
         }
     }
 }
