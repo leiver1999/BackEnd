@@ -19,11 +19,23 @@ namespace ProjectAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearFactura([FromBody] Factura factura)
         {
-            await _context.Facturas.AddAsync(factura);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return Ok(factura);
+            try
+            {
+                _context.Facturas.Add(factura);
+                await _context.SaveChangesAsync();
+                return Ok(factura);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllFacturas()
@@ -31,5 +43,41 @@ namespace ProjectAPI.Controllers
             var facturas = await _context.Facturas.ToListAsync();
             return Ok(facturas);
         }
+
+        /* [HttpPost("{facturaId}/asignar-requisicion/{requisicionId}")]
+        public IActionResult AsignarFacturaARequisicion(int facturaId, int requisicionId)
+        {
+            var factura = _context.Facturas.Find(facturaId);
+            var requisicion = _context.Requisiciones.Find(requisicionId);
+
+            if (factura == null || requisicion == null)
+            {
+                return NotFound();
+            }
+
+            factura.RequisicionId = requisicionId;
+            _context.Facturas.Update(factura);
+            _context.SaveChanges();
+
+            return Ok("Factura asignada a la requisición correctamente.");
+        } */
+
+        [HttpPost("{facturaId}/asignar-requisicion/{requisicionId}")]
+        public IActionResult AsignarFacturaARequisicion(int facturaId, int requisicionId)
+        {
+            var factura = _context.Facturas.Find(facturaId);
+            var requisicion = _context.Requisiciones.Find(requisicionId);
+
+            if (factura == null || requisicion == null)
+            {
+                return NotFound();
+            }
+
+            factura.RequisicionId = requisicionId;
+            _context.SaveChanges();
+
+            return Ok("Factura asignada a la requisición correctamente.");
+        }
+
     }
 }

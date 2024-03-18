@@ -42,12 +42,33 @@ namespace ProjectAPI.Migrations
                     b.Property<string>("Pedido")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RequisicionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("codigoFactura")
                         .HasColumnType("int");
 
                     b.HasKey("codigo");
 
+                    b.HasIndex("RequisicionId");
+
                     b.ToTable("Facturas");
+                });
+
+            modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Requisiciones");
                 });
 
             modelBuilder.Entity("ProjectAPI.Models.User", b =>
@@ -134,6 +155,15 @@ namespace ProjectAPI.Migrations
                     b.ToTable("Vehiculos");
                 });
 
+            modelBuilder.Entity("ProjectAPI.Models.Factura", b =>
+                {
+                    b.HasOne("ProjectAPI.Models.Requisicion", "Requisicion")
+                        .WithMany("Facturas")
+                        .HasForeignKey("RequisicionId");
+
+                    b.Navigation("Requisicion");
+                });
+
             modelBuilder.Entity("ProjectAPI.Models.User", b =>
                 {
                     b.HasOne("ProjectAPI.Models.Vehiculo", "Vehiculo")
@@ -141,6 +171,11 @@ namespace ProjectAPI.Migrations
                         .HasForeignKey("ProjectAPI.Models.User", "VehiculoId");
 
                     b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
+                {
+                    b.Navigation("Facturas");
                 });
 #pragma warning restore 612, 618
         }
