@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ProjectAPI.Models
 {
@@ -11,6 +12,10 @@ namespace ProjectAPI.Models
         public string Fecha { get; set; }
         public string Pedido { get; set; }
         public string NumFactura { get; set; }
+        [JsonIgnore]// Ignorar esta propiedad al serializar
+        public int? RequisicionId { get; set; }
+        [JsonIgnore]// Ignorar esta propiedad al serializar
+        public Requisicion Requisicion { get; set; }
 
     }
 }

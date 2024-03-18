@@ -56,41 +56,6 @@ namespace ProjectAPI.Controllers
             });
         }
 
-        //sirve para guardar nuevos usuarios
-        /*[HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] User userObj)
-        {
-            if (userObj == null)
-                return BadRequest();
-
-            if (await CheckEmailExist(userObj.Email))
-            {
-                return BadRequest(new { Message = "¡El correo ya existe!" });
-            }
-            if (await CheckCedulaExist(userObj.Cedula))
-            {
-                return BadRequest(new { Message = "¡La cédula ya existe!" });
-            }
-            if (await CheckTelefonoExist(userObj.Telefono))
-            {
-                return BadRequest(new { Message = "¡El teléfono  ya existe!" });
-            }
-            if (await CheckUserNameExist(userObj.Username))
-            {
-                return BadRequest(new { Message = "¡El nombre de usuario ya existe!" });
-            }
-
-            userObj.Password = PasswordHasher.HashPassword(userObj.Password);
-            userObj.Token = "";
-            userObj.IsActive = true;
-
-            await _authContext.Users.AddAsync(userObj);
-            await _authContext.SaveChangesAsync();
-            return Ok(new
-            {
-                Message = "Usuario registrado"
-            });
-        }*/
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] User user)
         {
