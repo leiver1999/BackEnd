@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectAPI.Context;
 
@@ -11,9 +12,11 @@ using ProjectAPI.Context;
 namespace ProjectAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240317052114_Vehiculo a Usuario")]
+    partial class VehiculoaUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,39 +53,6 @@ namespace ProjectAPI.Migrations
                     b.ToTable("Facturas");
                 });
 
-<<<<<<< Updated upstream
-=======
-            modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UltimoCambio")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Requisiciones");
-                });
-
->>>>>>> Stashed changes
             modelBuilder.Entity("ProjectAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -167,28 +137,6 @@ namespace ProjectAPI.Migrations
                     b.ToTable("Vehiculos");
                 });
 
-<<<<<<< Updated upstream
-=======
-            modelBuilder.Entity("ProjectAPI.Models.Factura", b =>
-                {
-                    b.HasOne("ProjectAPI.Models.Requisicion", "Requisicion")
-                        .WithMany("Facturas")
-                        .HasForeignKey("RequisicionId");
-
-                    b.Navigation("Requisicion");
-                });
-
-            modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
-                {
-                    b.HasOne("ProjectAPI.Models.User", "User")
-                        .WithMany("Requisiciones")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("User");
-                });
-
->>>>>>> Stashed changes
             modelBuilder.Entity("ProjectAPI.Models.User", b =>
                 {
                     b.HasOne("ProjectAPI.Models.Vehiculo", "Vehiculo")
@@ -197,19 +145,6 @@ namespace ProjectAPI.Migrations
 
                     b.Navigation("Vehiculo");
                 });
-<<<<<<< Updated upstream
-=======
-
-            modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
-                {
-                    b.Navigation("Facturas");
-                });
-
-            modelBuilder.Entity("ProjectAPI.Models.User", b =>
-                {
-                    b.Navigation("Requisiciones");
-                });
->>>>>>> Stashed changes
 #pragma warning restore 612, 618
         }
     }

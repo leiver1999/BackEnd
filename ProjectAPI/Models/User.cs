@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectAPI.Models
 {
@@ -16,6 +17,8 @@ namespace ProjectAPI.Models
         public int Telefono { get; set; }
         public string Cedula { get; set; }
         public bool IsActive { get; set; }
+        [ForeignKey("VehiculoId")]
+        public int? VehiculoId { get; set; }
         public Vehiculo Vehiculo { get; set; }
         public string ResetPasswordToken { get; set; }
         public DateTime ResetPasswordExpiry { get; set; }

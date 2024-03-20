@@ -3571,11 +3571,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Jeff\\Desktop\\backendPath\\ProjectAPI\\ProjectAPI.csproj",
       "projectName": "ProjectAPI",
-      "projectPath": "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+      "projectPath": "C:\\Users\\Jeff\\Desktop\\backendPath\\ProjectAPI\\ProjectAPI.csproj",
       "packagesPath": "C:\\Users\\Jeff\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jeff\\Desktop\\BackEnd\\ProjectAPI\\obj\\",
+      "outputPath": "C:\\Users\\Jeff\\Desktop\\backendPath\\ProjectAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Jeff\\AppData\\Roaming\\NuGet\\NuGet.Config",
