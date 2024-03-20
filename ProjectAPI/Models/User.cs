@@ -19,5 +19,6 @@ namespace ProjectAPI.Models
         public Vehiculo Vehiculo { get; set; }
         public string ResetPasswordToken { get; set; }
         public DateTime ResetPasswordExpiry { get; set; }
+        public List<Requisicion> Requisiciones { get; set; }
     }
 }

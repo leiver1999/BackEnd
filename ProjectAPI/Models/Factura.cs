@@ -11,6 +11,14 @@ namespace ProjectAPI.Models
         public string Fecha { get; set; }
         public string Pedido { get; set; }
         public string NumFactura { get; set; }
+<<<<<<< Updated upstream
+=======
+        //public string EmailVendedor { get; set; }
+        [JsonIgnore]// Ignorar esta propiedad al serializar
+        public int? RequisicionId { get; set; }
+        [JsonIgnore]// Ignorar esta propiedad al serializar
+        public Requisicion Requisicion { get; set; }
+>>>>>>> Stashed changes
 
     }
 }

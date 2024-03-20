@@ -325,5 +325,27 @@ namespace ProjectAPI.Controllers
 
             return Ok(new { Message = "Vehículo agregado al usuario exitosamente" });
         }
+
+        [HttpGet("{usuarioId}/requisiciones")]
+        public IActionResult ObtenerRequisicionesDeUsuario(int usuarioId)
+        {
+            var usuario = _authContext.Users.Include(u => u.Requisiciones).FirstOrDefault(u => u.Id == usuarioId);
+            if (usuario == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            var requisiciones = usuario.Requisiciones;
+
+            return Ok(requisiciones);
+        }
+
+        [HttpGet("distribuidores")]
+        public IActionResult GetDistribuidores()
+        {
+            var distribuidores = _authContext.Users.Where(u => u.Role == "Distribuidor").ToList();
+            return Ok(distribuidores);
+        }
+
     }
 }

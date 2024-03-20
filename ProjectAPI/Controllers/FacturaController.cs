@@ -31,5 +31,30 @@ namespace ProjectAPI.Controllers
             var facturas = await _context.Facturas.ToListAsync();
             return Ok(facturas);
         }
+<<<<<<< Updated upstream
+=======
+
+        [HttpPost("{facturaId}/asignar-requisicion/{requisicionId}")]
+        public IActionResult AsignarFacturaARequisicion(int facturaId, int requisicionId)
+        {
+            var factura = _context.Facturas.Find(facturaId);
+            var requisicion = _context.Requisiciones.Find(requisicionId);
+
+            if (factura == null || requisicion == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizar UltimoCambio a la fecha y hora actual
+            requisicion.UltimoCambio = DateTime.Now;
+
+            factura.RequisicionId = requisicionId;
+            _context.SaveChanges();
+
+            return Ok("Factura asignada a la requisición correctamente.");
+        }
+
+
+>>>>>>> Stashed changes
     }
 }

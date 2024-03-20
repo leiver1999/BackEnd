@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectAPI.Context;
 
@@ -11,9 +12,11 @@ using ProjectAPI.Context;
 namespace ProjectAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318203855_Usuario con Requisicion")]
+    partial class UsuarioconRequisicion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,16 +45,19 @@ namespace ProjectAPI.Migrations
                     b.Property<string>("Pedido")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RequisicionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("codigoFactura")
                         .HasColumnType("int");
 
                     b.HasKey("codigo");
 
+                    b.HasIndex("RequisicionId");
+
                     b.ToTable("Facturas");
                 });
 
-<<<<<<< Updated upstream
-=======
             modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
                 {
                     b.Property<int>("Id")
@@ -63,15 +69,6 @@ namespace ProjectAPI.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UltimoCambio")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
@@ -82,7 +79,6 @@ namespace ProjectAPI.Migrations
                     b.ToTable("Requisiciones");
                 });
 
->>>>>>> Stashed changes
             modelBuilder.Entity("ProjectAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -132,7 +128,9 @@ namespace ProjectAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VehiculoId");
+                    b.HasIndex("VehiculoId")
+                        .IsUnique()
+                        .HasFilter("[VehiculoId] IS NOT NULL");
 
                     b.ToTable("users", (string)null);
                 });
@@ -165,8 +163,6 @@ namespace ProjectAPI.Migrations
                     b.ToTable("Vehiculos");
                 });
 
-<<<<<<< Updated upstream
-=======
             modelBuilder.Entity("ProjectAPI.Models.Factura", b =>
                 {
                     b.HasOne("ProjectAPI.Models.Requisicion", "Requisicion")
@@ -186,17 +182,14 @@ namespace ProjectAPI.Migrations
                     b.Navigation("User");
                 });
 
->>>>>>> Stashed changes
             modelBuilder.Entity("ProjectAPI.Models.User", b =>
                 {
                     b.HasOne("ProjectAPI.Models.Vehiculo", "Vehiculo")
-                        .WithMany()
-                        .HasForeignKey("VehiculoId");
+                        .WithOne()
+                        .HasForeignKey("ProjectAPI.Models.User", "VehiculoId");
 
                     b.Navigation("Vehiculo");
                 });
-<<<<<<< Updated upstream
-=======
 
             modelBuilder.Entity("ProjectAPI.Models.Requisicion", b =>
                 {
@@ -207,7 +200,6 @@ namespace ProjectAPI.Migrations
                 {
                     b.Navigation("Requisiciones");
                 });
->>>>>>> Stashed changes
 #pragma warning restore 612, 618
         }
     }
