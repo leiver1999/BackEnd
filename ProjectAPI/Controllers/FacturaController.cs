@@ -31,8 +31,6 @@ namespace ProjectAPI.Controllers
             var facturas = await _context.Facturas.ToListAsync();
             return Ok(facturas);
         }
-<<<<<<< Updated upstream
-=======
 
         [HttpPost("{facturaId}/asignar-requisicion/{requisicionId}")]
         public IActionResult AsignarFacturaARequisicion(int facturaId, int requisicionId)
@@ -55,6 +53,5 @@ namespace ProjectAPI.Controllers
         }
 
 
->>>>>>> Stashed changes
     }
 }

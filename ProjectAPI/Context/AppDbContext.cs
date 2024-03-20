@@ -13,11 +13,9 @@ namespace ProjectAPI.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Factura> Facturas { get; set; }
         public DbSet<Vehiculo> Vehiculos { get; set; }
+        public DbSet<Requisicion> Requisiciones { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Vehiculo)
                 .WithOne().HasForeignKey<User>(u => u.VehiculoId)
@@ -35,11 +33,8 @@ namespace ProjectAPI.Context
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict).IsRequired(false);
 
->>>>>>> Stashed changes
-=======
             modelBuilder.Entity<User>().HasOne(u => u.Vehiculo).WithOne().HasForeignKey<User>(u => u.VehiculoId).IsRequired(false);
 
->>>>>>> 538434fa1740325ab4e900b1f2e7910213755360
             modelBuilder.Entity<User>().ToTable("users");
             base.OnModelCreating(modelBuilder);
         }
