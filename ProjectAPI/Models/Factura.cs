@@ -12,6 +12,9 @@ namespace ProjectAPI.Models
         public string Fecha { get; set; }
         public string Pedido { get; set; }
         public string NumFactura { get; set; }
+        public string CorreoCliente { get; set; }
+        public string Descripcion { get; set; }
+        public bool IsActive { get; set; }
         [JsonIgnore]// Ignorar esta propiedad al serializar
         public int? RequisicionId { get; set; }
         [JsonIgnore]// Ignorar esta propiedad al serializar

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {}
+    "C:\\Users\\iver2\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {
+    "C:\\Users\\iver2\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+        "projectUniqueName": "C:\\Users\\iver2\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
         "projectName": "ProjectAPI",
-        "projectPath": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
-        "packagesPath": "C:\\Users\\leive\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\obj\\",
+        "projectPath": "C:\\Users\\iver2\\Desktop\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+        "packagesPath": "C:\\Users\\iver2\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\iver2\\Desktop\\BackEnd\\ProjectAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\leive\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\iver2\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -86,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
