@@ -64,6 +64,7 @@ namespace ProjectAPI.Controllers
             vehiculo.Kilometraje = updateVehiculoRequest.Kilometraje;
             vehiculo.TipoVehiculo = updateVehiculoRequest.TipoVehiculo;
             vehiculo.EstadoVehiculo = updateVehiculoRequest.EstadoVehiculo;
+            vehiculo.EstadoRtv = updateVehiculoRequest.EstadoRtv;
 
             await _backendDbContext.SaveChangesAsync();
 
@@ -105,28 +106,31 @@ namespace ProjectAPI.Controllers
             return Ok(vehiculo);
         }
 
-        // Agrega este método al controlador VehiculosController
-        [Authorize]
+        
+        //[Authorize]
         [HttpGet("search")]
-        public async Task<ActionResult<List<Vehiculo>>> SearchVehiculos([FromQuery] string numeroPlaca)
+        public async Task<ActionResult<List<Vehiculo>>> SearchVehiculos([FromQuery] string searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(numeroPlaca))
+            // Verifica si el término de búsqueda no está vacío
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return BadRequest(new { Message = "El número de placa no puede estar vacío" });
+                return BadRequest(new { Message = "El término de búsqueda no puede estar vacío" });
             }
 
+            // Realiza la búsqueda en la base de datos
             var vehiculos = await _backendDbContext.Vehiculos
-                .Where(v => v.IsActive && v.NumeroPlaca.Contains(numeroPlaca))
+                .Where(v =>
+                    v.IsActive &&
+                    (v.NumeroPlaca.Contains(searchTerm) || v.EstadoRtv.Contains(searchTerm)))
                 .ToListAsync();
 
             if (vehiculos.Count == 0)
             {
-                return NotFound(new { Message = "No se encontraron vehículos con el número de placa proporcionado" });
+                return NotFound(new { Message = "No se encontraron vehículos que coincidan con el término de búsqueda" });
             }
 
             return Ok(vehiculos);
         }
-
 
     }
 }

@@ -16,6 +16,8 @@ namespace ProjectAPI.Models
         public string Email { get; set; }
         public int Telefono { get; set; }
         public string Cedula { get; set; }
+        public string FechaLicencia { get; set; }
+        public string EstadoLicencia { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("VehiculoId")]
         public int? VehiculoId { get; set; }

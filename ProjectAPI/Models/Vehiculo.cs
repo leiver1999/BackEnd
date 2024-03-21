@@ -13,6 +13,7 @@ namespace ProjectAPI.Models
         public string TipoVehiculo { get; set; }
 
         public string EstadoVehiculo { get; set; }
+        public string EstadoRtv { get; set; }
         public bool IsActive { get; set; }
 
     }
