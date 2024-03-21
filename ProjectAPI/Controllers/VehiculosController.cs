@@ -64,6 +64,7 @@ namespace ProjectAPI.Controllers
             vehiculo.Kilometraje = updateVehiculoRequest.Kilometraje;
             vehiculo.TipoVehiculo = updateVehiculoRequest.TipoVehiculo;
             vehiculo.EstadoVehiculo = updateVehiculoRequest.EstadoVehiculo;
+            vehiculo.EstadoRtv = updateVehiculoRequest.EstadoRtv;
 
             await _backendDbContext.SaveChangesAsync();
 

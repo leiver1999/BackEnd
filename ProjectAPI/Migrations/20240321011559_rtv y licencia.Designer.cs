@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectAPI.Context;
 
@@ -11,9 +12,11 @@ using ProjectAPI.Context;
 namespace ProjectAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240321011559_rtv y licencia")]
+    partial class rtvylicencia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,8 +144,8 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("EstadoRtv")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("EstadoRtv")
+                        .HasColumnType("bit");
 
                     b.Property<string>("EstadoVehiculo")
                         .HasColumnType("nvarchar(max)");

@@ -200,6 +200,8 @@ namespace ProjectAPI.Controllers
             user.Role = updatedUser.Role;
             user.Telefono = updatedUser.Telefono;
             user.Cedula = updatedUser.Cedula;
+            user.FechaLicencia = updatedUser.FechaLicencia;
+            user.EstadoLicencia = updatedUser.EstadoLicencia;
 
             // Verifica si se proporcionó un vehículoId para actualizar el vehículo asignado al usuario
             if (updatedUser.VehiculoId != null)
@@ -259,7 +261,9 @@ namespace ProjectAPI.Controllers
                     (user.FirstName.Contains(searchTerm) ||
                      user.LastName.Contains(searchTerm) ||
                      user.Cedula.Contains(searchTerm) ||
-                     user.Username.Contains(searchTerm)))
+                     user.Username.Contains(searchTerm) ||
+                     user.EstadoLicencia.Contains(searchTerm)
+                     )) 
                 .ToListAsync();
 
             if (matchingUsers.Count == 0)
