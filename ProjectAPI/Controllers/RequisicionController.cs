@@ -57,6 +57,17 @@ namespace ProjectAPI.Controllers
             return Ok(facturas);
         }
 
+        [HttpGet("{requisicionId}")]
+        public IActionResult ObtenerRequisicionPorId(int requisicionId)
+        {
+            var requisicion = _context.Requisiciones.FirstOrDefault(r => r.Id == requisicionId);
+            if (requisicion == null)
+            {
+                return NotFound("Requisición no encontrada.");
+            }
+            return Ok(requisicion);
+        }
+
         [HttpPut("{requisicionId}")]
         public IActionResult EditarRequisicion(int requisicionId, [FromBody] Requisicion requisicionEditada)
         {
@@ -167,7 +178,6 @@ namespace ProjectAPI.Controllers
             return Ok(requisicionesCreadasAsignadas);
         }
 
-
         [HttpPost("{requisicionId}/asignar-usuario/{usuarioId}")]
         public IActionResult AsignarRequisicionAUsuario(int requisicionId, int usuarioId)
         {
@@ -216,6 +226,25 @@ namespace ProjectAPI.Controllers
             return Ok("Requisición asignada al usuario correctamente.");
         }
 
+        [HttpGet("{requisicionId}/usuario")]
+        public IActionResult ObtenerUsuarioDeRequisicion(int requisicionId)
+        {
+            var requisicion = _context.Requisiciones
+                                .Include(r => r.User) // Incluye la relación con el usuario
+                                .FirstOrDefault(r => r.Id == requisicionId);
+
+            if (requisicion == null)
+            {
+                return NotFound("Requisición no encontrada.");
+            }
+
+            if (requisicion.UserId == null)
+            {
+                return NotFound("Esta requisición no está asignada a ningún usuario.");
+            }
+
+            return Ok(requisicion.User);
+        }
 
     }
 }
