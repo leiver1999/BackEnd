@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leive\\OneDrive\\Escritorio\\Merge\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {}
+    "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leive\\OneDrive\\Escritorio\\Merge\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {
+    "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leive\\OneDrive\\Escritorio\\Merge\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+        "projectUniqueName": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
         "projectName": "ProjectAPI",
-        "projectPath": "C:\\Users\\leive\\OneDrive\\Escritorio\\Merge\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+        "projectPath": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
         "packagesPath": "C:\\Users\\leive\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leive\\OneDrive\\Escritorio\\Merge\\BackEnd\\ProjectAPI\\obj\\",
+        "outputPath": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\leive\\AppData\\Roaming\\NuGet\\NuGet.Config",

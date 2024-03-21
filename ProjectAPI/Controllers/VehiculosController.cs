@@ -109,24 +109,33 @@ namespace ProjectAPI.Controllers
         // Agrega este método al controlador VehiculosController
         [Authorize]
         [HttpGet("search")]
-        public async Task<ActionResult<List<Vehiculo>>> SearchVehiculos([FromQuery] string numeroPlaca)
+        public async Task<ActionResult<List<Vehiculo>>> SearchVehiculos([FromQuery] string numeroPlaca, [FromQuery] string estadoRtv)
         {
             if (string.IsNullOrWhiteSpace(numeroPlaca))
             {
                 return BadRequest(new { Message = "El número de placa no puede estar vacío" });
             }
 
-            var vehiculos = await _backendDbContext.Vehiculos
-                .Where(v => v.IsActive && v.NumeroPlaca.Contains(numeroPlaca))
-                .ToListAsync();
+            IQueryable<Vehiculo> query = _backendDbContext.Vehiculos
+                                            .Where(v => v.IsActive && v.NumeroPlaca.Contains(numeroPlaca));
+
+            if (!string.IsNullOrWhiteSpace(estadoRtv))
+            {
+                // Filtrar por EstadoRtv (ignorando mayúsculas y minúsculas)
+                query = query.Where(v => v.EstadoRtv.Equals(estadoRtv, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var vehiculos = await query.ToListAsync();
 
             if (vehiculos.Count == 0)
             {
-                return NotFound(new { Message = "No se encontraron vehículos con el número de placa proporcionado" });
+                return NotFound(new { Message = "No se encontraron vehículos con el número de placa y estado RTV proporcionados" });
             }
 
             return Ok(vehiculos);
         }
+
+
 
 
     }

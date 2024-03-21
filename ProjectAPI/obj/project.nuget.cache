@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VKtqoRDMRp+5r7izc760/8EHzrqsJgGmHKRAKlq8GDMiHvs4bLgLcloha6PmiZxBytrmTq3ofkBeVrpylwAvig==",
+  "dgSpecHash": "4mAIxjID50kkF6h1gNnBOiPayg1Kv+YCWeh2VpXXsKNaND8nqjesnCok7QCVs6bwPQCotxmZ/m+8krsQ8uOg+A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\leive\\OneDrive\\Escritorio\\Merge\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
+  "projectFilePath": "C:\\Users\\leive\\OneDrive\\Escritorio\\New folder\\BackEnd\\ProjectAPI\\ProjectAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\leive\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\leive\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
